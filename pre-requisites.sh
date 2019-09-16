@@ -1,4 +1,5 @@
 #!/bin/bash
+echo $HOSTNAME
 SPACE=`df -h| grep -vE '^Filesystem|tmpfs|cdrom'`
 echo "  "
 echo "1.root space is: $SPACE"
