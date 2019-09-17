@@ -62,7 +62,7 @@ requests.packages.urllib3.disable_warnings()
 
 HOST = 'https://console.cloudendure.com'
 #bpl = open('/Users/jysethy/Desktop/comparetool/blue.txt', 'r')
-lines = [line.rstrip() for line in open('/Users/jysethy/Desktop/comparetool/blue.txt')]
+lines = [line.rstrip() for line in open('/var/lib/jenkins/workspace/SCB-Migration/blue.txt')]
 INSTANCE_TYPE = lines[0]
 print(INSTANCE_TYPE)
 SUBNET = 'subnet-xxxxxx'
