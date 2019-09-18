@@ -62,9 +62,9 @@ requests.packages.urllib3.disable_warnings()
 
 HOST = 'https://console.cloudendure.com'
 #bpl = open('/Users/jysethy/Desktop/comparetool/blue.txt', 'r')
-lines = [line.rstrip() for line in open('/var/lib/jenkins/workspace/SCB-Migration/blue.txt')]
-INSTANCE_TYPE = lines[0]
-print(INSTANCE_TYPE)
+#lines = [line.rstrip() for line in open('/var/lib/jenkins/workspace/SCB-Migration/blue.txt')]
+INSTANCE_TYPE = 'c4.large'
+#print(INSTANCE_TYPE)
 SUBNET = 'subnet-xxxxxx'
 SG = 'sg-xxxxxx'
 
@@ -356,15 +356,15 @@ def set_blueprint(args, machine_id, project_id):
 
     blueprint = blueprint[0]
 
-    bpt = open('blue.txt', 'r')
-    lines = bpt.readlines()
-    blueprint['instanceType']=lines[0]
-    blueprint['machineId']=machine_id
+    #bpt = open('blue.txt', 'r')
+    #lines = bpt.readlines()
+    #blueprint['instanceType']=lines[0]
+    #blueprint['machineId']=machine_id
 
-    #blueprint['instanceType'] = INSTANCE_TYPE
+    blueprint['instanceType'] = INSTANCE_TYPE
     # blueprint['subnetIDs']=[SUBNET]
     # blueprint['securityGroupIDs']=[SG]
-    #blueprint['machineId'] = machine_id
+    blueprint['machineId'] = machine_id
 
     resp = session.patch(
         url=HOST +
