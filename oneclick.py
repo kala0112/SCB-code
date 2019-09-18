@@ -1,24 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@santhoshbehara-cg 
-Learn Git and GitHub without any code!
-Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
-
-
-1
-00jyotirepo/scb-migration
- Code Issues 0 Pull requests 0 Projects 0 Wiki Security Insights
-scb-migration/oneclick.py
-@jyotirepo jyotirepo first commit
-af3b04a 4 days ago
-Executable File  469 lines (390 sloc)  15.5 KB
-  
 #!/usr/bin/python
 
 # =================================================================================================
@@ -30,23 +9,23 @@ Executable File  469 lines (390 sloc)  15.5 KB
 #
 # Arguments:
 #
-#   -u USERNAME, 	--username USERNAME
+#   -u USERNAME,        --username USERNAME
 #                         user name for the CloudEndure account
-#   -p PASSWORD, 	--password PASSWORD
+#   -p PASSWORD,        --password PASSWORD
 #                         password for the CloudEndure account
-#   -n HOSTNAME, 	--agentname HOSTNAME
+#   -n HOSTNAME,        --agentname HOSTNAME
 #                         hostname of instance to migrate
-# 	-j PROJECT, 	--project PROJECT_NAME
+#       -j PROJECT,     --project PROJECT_NAME
 #                         CloudEndure's project name
 #
 #
 # Required inputs: CloudEndure username and password, target server name
 #
 # Outputs: Will print to console the entire process:
-#	1. CloudEndure Agent installation on the target server.
-#	2. Blueprint settings.
-#	3. Replication progress.
-#	4. Target server launch progress.
+#       1. CloudEndure Agent installation on the target server.
+#       2. Blueprint settings.
+#       3. Replication progress.
+#       4. Target server launch progress.
 #
 #
 # =================================================================================================
@@ -61,10 +40,10 @@ import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
 HOST = 'https://console.cloudendure.com'
-#bpl = open('/Users/jysethy/Desktop/comparetool/blue.txt', 'r')
-#lines = [line.rstrip() for line in open('/var/lib/jenkins/workspace/SCB-Migration/blue.txt')]
-INSTANCE_TYPE = 'c4.large'
-#print(INSTANCE_TYPE)
+
+lines = [line.rstrip() for line in open('/var/lib/rundeck/test/scb-migration/blue.txt')]
+INSTANCE_TYPE = lines[0]
+print (INSTANCE_TYPE)
 SUBNET = 'subnet-xxxxxx'
 SG = 'sg-xxxxxx'
 
@@ -76,12 +55,12 @@ LINUX_FOLDER = "/tmp"
 def main():
 
     # This is the main function, call the other functions to do the following:
-    # 	1. CloudEndure Agent installation on the target server.
-    #	2. Blueprint settings.
-    #	3. Replication progress.
-    #	4. Target server launch progress.
+    #   1. CloudEndure Agent installation on the target server.
+    #   2. Blueprint settings.
+    #   3. Replication progress.
+    #   4. Target server launch progress.
     #
-    # Returns: 	nothing - will always exit
+    # Returns:  nothing - will always exit
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', '--user', required=True, help='User name')
@@ -152,10 +131,10 @@ def install_agent(args, installation_token):
     # This function makes the HTTPS call out to the CloudEndure API and waits for the replication to complete
     #
     # Usage: wait_for_replicaiton(args, machine_id, project_id)
-    # 	'args' is script user input (args.user, args.password, args.agentname, args.project)
+    #   'args' is script user input (args.user, args.password, args.agentname, args.project)
     #
     #
-    # Returns: 	0 on success, -1 on failure
+    # Returns:  0 on success, -1 on failure
 
     # Check if it's a windows or not
     if os.name == 'nt':
@@ -229,11 +208,11 @@ def wait_for_replication(args, machine_id, project_id):
     # launching the target server.
     #
     # Usage: wait_for_replicaiton(args, machine_id, project_id)
-    # 	'args' is script user input (args.user, args.password, args.agentname)
-    # 	'machine_id' is the CloudEndure replicatin machine ID
-    # 	'project_id' is the CloudEndure project ID
+    #   'args' is script user input (args.user, args.password, args.agentname)
+    #   'machine_id' is the CloudEndure replicatin machine ID
+    #   'project_id' is the CloudEndure project ID
     #
-    # Returns: 	0 on success, -1 on failure
+    # Returns:  0 on success, -1 on failure
 
     # Looping until replication completes
     print ("Waiting for Replication to complete")
@@ -330,11 +309,11 @@ def set_blueprint(args, machine_id, project_id):
     # This function will set the instanceType, subnetID, and the securityGroupIDs.
     #
     # Usage: set_blueprint(args, machine_id, project_id)
-    # 	'args' is script user input (args.user, args.password, args.agentname)
-    # 	'machine_id' is the CloudEndure replicatin machine ID
-    # 	'project_id' is the CloudEndure project ID
+    #   'args' is script user input (args.user, args.password, args.agentname)
+    #   'machine_id' is the CloudEndure replicatin machine ID
+    #   'project_id' is the CloudEndure project ID
     #
-    # Returns: 	0 on success, -1 on failure
+    # Returns:  0 on success, -1 on failure
 
     print ("Setting blueprint...")
     session, resp, endpoint = login(args)
@@ -356,15 +335,15 @@ def set_blueprint(args, machine_id, project_id):
 
     blueprint = blueprint[0]
 
-    #bpt = open('blue.txt', 'r')
+    #bpt = open('/var/lib/rundeck/test/scb-migration/blue.txt', 'r')
     #lines = bpt.readlines()
-    #blueprint['instanceType']=lines[0]
-    #blueprint['machineId']=machine_id
+    blueprint['instanceType']=lines[0]
+    blueprint['machineId']=machine_id
 
-    blueprint['instanceType'] = INSTANCE_TYPE
+    #blueprint['instanceType'] = INSTANCE_TYPE
     # blueprint['subnetIDs']=[SUBNET]
     # blueprint['securityGroupIDs']=[SG]
-    blueprint['machineId'] = machine_id
+    #blueprint['machineId'] = machine_id
 
     resp = session.patch(
         url=HOST +
@@ -391,9 +370,9 @@ def launch_target_machine(args, machine_id, project_id):
     # This function makes the HTTPS call out to the CloudEndure API and launches the target server on the Cloud
     #
     # Usage: launch_target_machine(args, machine_id, project_id)
-    # 	'args' is script user input
-    # 	'machine_id' is the CloudEndure replicatin machine ID
-    # 	'project_id' is the CloudEndure project ID
+    #   'args' is script user input
+    #   'machine_id' is the CloudEndure replicatin machine ID
+    #   'project_id' is the CloudEndure project ID
     #
     # Returns: 0 on success
 
@@ -452,10 +431,10 @@ def login(args):
     # This function makes the HTTPS call out to the CloudEndure API to login using the credentilas provided
     #
     # Usage: login(args)
-    # 	'args' is script user input (args.user, args.password, args.agentname)
+    #   'args' is script user input (args.user, args.password, args.agentname)
     #
-    # Returns: 	-1 on failure
-    #			session, response, endpoint on success
+    # Returns:  -1 on failure
+    #                   session, response, endpoint on success
 
     endpoint = '/api/latest/'
     session = requests.Session()
@@ -487,15 +466,3 @@ def login(args):
 ##########################################################################
 if __name__ == '__main__':
     main()
-© 2019 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
