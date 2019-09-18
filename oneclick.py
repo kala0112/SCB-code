@@ -41,7 +41,7 @@ requests.packages.urllib3.disable_warnings()
 
 HOST = 'https://console.cloudendure.com'
 
-lines = [line.rstrip() for line in open('/var/lib/rundeck/test/scb-migration/blue.txt')]
+lines = [line.rstrip() for line in open('/home/ec2-user/scb-migration/blue.txt')]
 INSTANCE_TYPE = lines[0]
 print (INSTANCE_TYPE)
 SUBNET = 'subnet-xxxxxx'
